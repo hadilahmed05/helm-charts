@@ -1,0 +1,55 @@
+replicaCount: 1
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+
+backend:
+  image: "hadil0505/backend-image:latest"
+  port: 3001
+  environment:
+    DB_HOST: "mysql"
+    DB_USER: "root"
+    DB_PASSWORD_SECRET_NAME: "db-secret"
+    DB_NAME: "testdb"
+
+frontend:
+  image: "hadil0505/frontend-image:latest"
+  port: 3000
+
+mysql:
+  image: "mysql:8.0"
+  port: 3306
+  database: "testdb"
+  rootPassword: "root-password"
+  passwordSecretName: "db-secret"
+  storageSize: "5Gi"
+
+ingress:
+  enabled: true
+  hostname: "myapp.workerbase.io"
+
+persistentVolume:
+  storageClassName: "standard"
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - protocol: TCP
+          port: 3001
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+      ports:
+        - protocol: TCP
+          port: 3306
