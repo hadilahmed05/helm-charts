@@ -5,19 +5,18 @@ metadata:
 spec:
   podSelector: {}  # Applies to all pods in the namespace
 
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: frontend  # Allow traffic from frontend to backend
-      ports:
-        - protocol: TCP
-          port: 3001  # Backend service port (to allow traffic to backend)
-
-    - from:
-        - podSelector:
-            matchLabels:
-              app: backend  # Allow traffic from backend to MySQL
-      ports:
-        - protocol: TCP
-          port: 3306  # MySQL service port (to allow traffic to MySQL)
+ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            app: frontend
+    ports:
+      - protocol: TCP
+        port: 8080  # Backend service port
+  - from:
+      - podSelector:
+          matchLabels:
+            app: backend
+    ports:
+      - protocol: TCP
+        port: 3306  # MySQL service port

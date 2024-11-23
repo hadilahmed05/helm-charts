@@ -2,15 +2,15 @@ replicaCount: 1
 
 resources:
   requests:
-    memory: "256Mi"
-    cpu: "500m"
+    memory: "256Mi"  
+    cpu: "200m"      
   limits:
-    memory: "512Mi"
-    cpu: "1000m"
+    memory: "512Mi"  
+    cpu: "500m"      
 
 backend:
   image: "hadil0505/backend-image:latest"
-  port: 3001
+  port: 8080
   environment:
     DB_HOST: "mysql"
     DB_USER: "root"
@@ -19,7 +19,7 @@ backend:
 
 frontend:
   image: "hadil0505/frontend-image:latest"
-  port: 3000
+  port: 8081
 
 mysql:
   image: "mysql:8.0"
@@ -28,6 +28,13 @@ mysql:
   rootPassword: "root-password"
   passwordSecretName: "db-secret"
   storageSize: "5Gi"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"    
+    limits:
+      memory: "512Mi"
+      cpu: "500m"    
 
 ingress:
   enabled: true
@@ -45,11 +52,24 @@ networkPolicy:
               app: frontend
       ports:
         - protocol: TCP
-          port: 3001
+          port: 8081
     - from:
         - podSelector:
             matchLabels:
               app: backend
       ports:
         - protocol: TCP
-          port: 3306
+          port: 8080
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automount: true
+
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
