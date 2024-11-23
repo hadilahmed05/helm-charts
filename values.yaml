@@ -14,7 +14,7 @@ backend:
   environment:
     DB_HOST: "mysql"
     DB_USER: "root"
-    DB_PASSWORD_SECRET_NAME: "db-secret"
+    DB_PASSWORD: "root-password"  
     DB_NAME: "testdb"
 
 frontend:
@@ -26,7 +26,6 @@ mysql:
   port: 3306
   database: "testdb"
   rootPassword: "root-password"
-  passwordSecretName: "db-secret"
   storageSize: "5Gi"
   resources:
     requests:
@@ -66,7 +65,6 @@ serviceAccount:
   name: ""
   annotations: {}
   automount: true
-
 
 autoscaling:
   enabled: false

@@ -23,10 +23,7 @@ spec:
             - name: DB_USER
               value: {{ .Values.backend.environment.DB_USER }}
             - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.environment.DB_PASSWORD_SECRET_NAME }}
-                  key: MYSQL_ROOT_PASSWORD
+              value: {{ .Values.backend.environment.DB_PASSWORD }}
             - name: DB_NAME
               value: {{ .Values.backend.environment.DB_NAME }}
           resources:
@@ -89,10 +86,7 @@ spec:
             - containerPort: {{ .Values.mysql.port }}
           env:
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.mysql.passwordSecretName }}
-                  key: MYSQL_ROOT_PASSWORD
+              value: {{ .Values.mysql.rootPassword }}
             - name: MYSQL_DATABASE
               value: {{ .Values.mysql.database }}
           resources:
